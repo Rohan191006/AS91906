@@ -1,0 +1,153 @@
+from tkinter import *
+import tkinter as tk
+import random
+from tkinter import messagebox
+
+
+
+class gamepage(tk.Tk):
+    def __init__(app):
+        super().__init__()
+        def submt(var1):
+            if var1.get() == str(resultPLUS()):
+                correct = tk.Label(app, text="Correct!", fg="green", font=("Courier", 16))
+                correct.place(relx=0.3, rely=0.2)
+            else:
+                wrong = tk.Label(app, text="Wrong!!!", fg="red", font=("Courier", 16))
+                wrong.place(relx=0.3, rely=0.2)
+
+
+        def try_again():
+            try_again.num1update = random.choice(num)
+            try_again.num2update = random.choice(num)
+            newQ = tk.Label(app, text=f"{try_again.num1update}+{try_again.num2update}", font=("Courier", 16))
+            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            solving.delete(0, tk.END)
+
+
+        def resultPLUS():
+            try_again
+            return try_again.num1update + try_again.num2update
+
+        app.title("Math For Kids")
+        # canvas = Canvas(app, width=240, height=300)
+        # canvas.pack()
+        app.geometry("240x300")
+        app.resizable(False, False)
+        start =tk.Button(app, text="Start", command=try_again)
+        start.place(relx=0.45, rely=0.2)
+        num = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
+        solving = tk.Entry(app)
+        solving.place(relx=0.35, rely=0.4, relwidth=0.34, relheight=0.23)
+        submit = tk.Button(app, text="Submit", command=lambda: submt(solving))
+        submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
+        try_again = tk.Button(app, text="Try Again", command=try_again)
+        try_again.place(relx=0.39, rely=0.9)
+        app.mainloop()
+
+
+
+
+class login(Tk):
+    def __init__(root):
+        super().__init__()
+
+        root.title('Swimmer Login Page')
+        root.geometry('925x500+300+200')
+        root.configure(bg="white")
+        root.resizable(False, False)
+
+
+        def signin():
+            username=user.get()
+            password=code.get()
+
+
+            if username=='admin' and password=="1234":
+                root.destroy()
+                gamepage()
+
+
+
+            #Error proofing
+            
+            elif username!= 'admin' and password!='1234':
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+            
+            elif password!= '1234' and username!='admin':
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+
+            elif username!="admin":
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+
+        #Background image, frame and heading for GUI
+
+        frame= Frame(root, width=350, height=350, bg="white")
+        frame.place(x=480, y=70)
+
+
+        heading = Label(frame, text = 'Sign In', fg = '#57a1f8', bg='white', font = ('Helvetica', 23, 'bold') )
+        heading.place(x=100, y=5)
+
+
+        #Placement for the Username textbox
+
+        def on_enter(e):
+            user.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=user.get()
+            if name == '':
+                user.insert(0, 'Username')
+
+
+        user = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        user.place(x=30, y=80)
+        user.insert(0, 'Username')
+        user.bind('<FocusIn>', on_enter)
+        user.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=107)
+
+
+        #Placement for the Password textbox
+
+        def on_enter(e):
+            code.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=code.get()
+            if name== '':
+                code.insert(0, 'Password')
+
+
+        code = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        code.place(x=30, y=150)
+        code.insert(0, 'Password')
+        code.bind('<FocusIn>', on_enter)
+        code.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=177)
+
+        #Buttons
+
+        Button(frame, width=39, pady=7, text='Sign In', bg='#57a1f8', fg='white', font=('Helvetica', 9), border=0, command=signin).place(x=35, y=204)
+        label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
+        label.place(x=75, y=270)
+
+
+        sign_up = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8')
+        sign_up.place(x=215, y=270)
+
+        root.mainloop()
+if __name__ == "__main__":
+    login()
