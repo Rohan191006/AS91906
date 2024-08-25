@@ -1,0 +1,204 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import random
+
+
+#class for game page
+class gamepage(tk.Tk):
+    derived_question = None
+    answer = None
+    def __init__(app, difficulty):
+        super().__init__()
+        app.answered_already= False
+        score= IntVar()
+
+        def submt(var1):
+            if app.answered_already== False:
+                if var1.get() == str(app.answer):
+                    correct = tk.Label(app, text="Correct!", fg="yellow", font=("Courier", 16,), bg='#0294ee')
+                    correct.place(relx=0.16, rely=0.07, relwidth=0.7, relheight=0.23)
+                    score.set(score.get()+1)
+                    app.answered_already= True
+
+            else:
+                wrong = tk.Label(app, text="Wrong!!!", fg="yellow", font=("Courier", 16), bg='#0294ee')
+                wrong.place(relx=0.16, rely=0.07, relwidth=0.7, relheight=0.23)
+
+
+        def try_again():
+            try_again.num1update = random.randint(0, max_var)
+            try_again.num2update = random.randint(0, max_var)
+            if difficulty==1:
+                operation = random.choice(["+"])
+            elif difficulty==2:
+                operation = random.choice(["+", "-"])
+            else:
+                operation = random.choice(["+", "-", "*"])
+
+            app.derived_question= f"{try_again.num1update} {operation} {try_again.num2update}"
+            app.answer= eval(app.derived_question)
+            app.derived_question = f"{try_again.num1update} {operation} {try_again.num2update}"
+            app.answer = eval(app.derived_question)
+            score_label= tk.Label(app, textvariable=score,bg='#0294ee', font= 18)
+            score_label.place(relx=0.5, rely= 0.8)
+            newQ = tk.Label(app, text=app.derived_question, font=("Courier", 16),bg='#0294ee')
+            newQ.place(relx=0.16, rely=0.07, relwidth=0.7, relheight=0.23)
+            app.answered_already= False
+            solving.delete(0, tk.END)
+
+
+        app.title("Math For Kids")
+        app.geometry("600x400")
+        app.configure(bg='#0294ee')
+        app.resizable(False, False)
+        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')
+        start.place(relx=0.45, rely=0.1)
+
+        if difficulty == 1: 
+            max_var = 10
+        elif difficulty == 2:
+            max_var = 25
+        else:
+            max_var = 50
+
+
+        solving = tk.Entry(app)
+        solving.place(relx=0.35, rely=0.3, relwidth=0.34, relheight=0.23)
+        submit = tk.Button(app, text="Submit", command=lambda: submt(solving),bg='#ffffff')
+        submit.place(relx=0.35, rely=0.54, relwidth=0.34, relheight=0.23)
+        try_again = tk.Button(app, text="Next Question", command=try_again,bg='#ffffff')
+        try_again.place(relx=0.2, rely=0.9)
+        back_button = tk.Button(app, text="GO Back", bg="#ffffff", command=lambda: app.change_page())
+        back_button.place(relx=0.4, rely=0.9)
+        exit_button= tk.Button(app, text='Exit' , bg="#ffffff", command=lambda: app.destroy())
+        exit_button.place(relx=0.6, rely=0.9)
+        app.mainloop()
+
+    def change_page(self):
+        self.destroy()
+        intropage()     
+
+
+#class for login screen with error proofing
+class login(Tk):
+    def __init__(root):
+        super().__init__()
+
+        root.title('Swimmer Login Page')
+        root.geometry('925x500+300+200')
+        root.configure(bg="white")
+        root.resizable(False, False)
+
+
+        def signin():
+            username=user.get()
+            password=code.get()
+
+
+            if username=='admin' and password=="1234":
+                root.destroy()
+                intropage()
+
+
+            #Error proofing
+            
+            elif username!= 'admin' and password!='1234':
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+            
+            elif password!= '1234' and username!='admin':
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+
+            elif username!="admin":
+                messagebox.showerror("Invalid", "Incorrect Username and Password ")
+
+
+        #Background image, frame and heading for GUI
+
+        frame= Frame(root, width=350, height=350, bg="white")
+        frame.place(x=480, y=70)
+
+
+        heading = Label(frame, text = 'Sign In', fg = '#57a1f8', bg='white', font = ('Helvetica', 23, 'bold') )
+        heading.place(x=100, y=5)
+
+
+        #Placement for the Username textbox
+
+        def on_enter(e):
+            user.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=user.get()
+            if name == '':
+                user.insert(0, 'Username')
+
+
+        user = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        user.place(x=30, y=80)
+        user.insert(0, 'Username')
+        user.bind('<FocusIn>', on_enter)
+        user.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=107)
+
+
+        #Placement for the Password textbox
+
+        def on_enter(e):
+            code.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=code.get()
+            if name== '':
+                code.insert(0, 'Password')
+
+
+        code = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        code.place(x=30, y=150)
+        code.insert(0, 'Password')
+        code.bind('<FocusIn>', on_enter)
+        code.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=177)
+
+        #Buttons
+
+        Button(frame, width=39, pady=7, text='Sign In', bg='#57a1f8', fg='white', font=('Helvetica', 9), border=0, command=signin).place(x=35, y=204)
+        label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
+        label.place(x=75, y=270)
+
+
+        sign_up = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8')
+        sign_up.place(x=215, y=270)
+
+        root.mainloop()
+
+
+#class for intro page to select game difficulty
+class intropage(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("600x400")
+        self.resizable(False, False)
+        self.title("Introduction")
+        self.configure(bg='#ffffff')
+        frame = tk.Frame(bg='#ffffff')
+        easy= tk.Button(self, text="easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.1, rely=0.3)
+        medium= tk.Button(self, text="medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.4, rely=0.3)
+        hard= tk.Button(self, text="hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)
+        frame.pack()
+        self.mainloop()
+
+    def change_page(self, diff):
+        self.destroy()
+        gamepage(diff)  
+
+if __name__ == "__main__":
+    login()
