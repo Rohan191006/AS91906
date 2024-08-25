@@ -130,9 +130,9 @@ class login(Tk):
                 if len(password) > 5 and password.find(" ") == -1:
                     if root.option == 0:
                         #Sign In
-                        open_this_joint = open("logins.json", "r")
-                        accounts = json.load(open_this_joint)
-                        open_this_joint.close()
+                        open_logins = open("logins.json", "r")
+                        accounts = json.load(open_logins)
+                        open_logins.close()
                         for account in accounts:
                             if account["username"] == username and account["password"] == password:
                                 root.destroy()
@@ -142,9 +142,9 @@ class login(Tk):
                         messagebox.showerror(message="Invalid login")
                     else:
                         #Sign Up
-                        open_this_joint = open("logins.json", "r")
-                        accounts = json.load(open_this_joint)
-                        open_this_joint.close()
+                        open_logins = open("logins.json", "r")
+                        accounts = json.load(open_logins)
+                        open_logins.close()
                         
                         accounts.append({"username": username, "password": password})
                         write_file = open("logins.json", "w")
