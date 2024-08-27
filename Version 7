@@ -12,6 +12,10 @@ class gamepage(tk.Tk):
     answer = None
     def __init__(app, difficulty):
         super().__init__()
+        app.title("Knockout Numbers")
+        app.geometry("600x400")
+        app.configure(bg='#0294ee')
+        app.resizable(False, False)
         app.answered_already= False
         score= IntVar()
         app.time_left = 60
@@ -24,7 +28,7 @@ class gamepage(tk.Tk):
             elif var1.get()=="":
                 error_label.config(text="Dont leave it blank\nAnswer the Question", font=13)
                 app.after(2500, error_clear)
-            elif var1.get().isdigit()==False and var1.get().find("-")>=1:
+            elif var1.get().isdigit()==False and var1.get().find("-")>=1: #fix this
                 error_label.config(text="Enter a number\nnot a special character", font=13)
                 app.after(2500, error_clear)
             else:
@@ -42,6 +46,9 @@ class gamepage(tk.Tk):
                     app.after(1000, try_again)
                     if score.get()==3:
                         app.final_page(1)
+                        #messagebox.showinfo(message="You win.")
+                        #app.destroy()
+                        #intropage()
                 else:
                     result_label.config(text="Wrong")
                     opponent_gif()
@@ -82,6 +89,10 @@ class gamepage(tk.Tk):
                 app.after(1000, update_timer)
             else:
                 app.final_page(2)
+                #messagebox.showinfo(message="You lose.")
+                #app.destroy()
+                #intropage()
+
 
 
         def try_again():
@@ -109,12 +120,7 @@ class gamepage(tk.Tk):
             if app.time_left==60:
                 update_timer()
 
-        app.title("Math For Kids")
-        app.geometry("600x400")
-        app.configure(bg='#0294ee')
-        app.resizable(False, False)
-        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')
-        start.place(relx=0.463, rely=0.7)
+
 
         if difficulty == 1: 
             max_var = 10
@@ -125,6 +131,8 @@ class gamepage(tk.Tk):
 
 
         solving = tk.Entry(app)
+        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')
+        start.place(relx=0.463, rely=0.7)
         app.gif_image = tk.PhotoImage(file="boxing.gif", format="gif -index 1")
         gif_canvas = tk.Canvas(width=480, height=250, background="white")
         gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
@@ -159,8 +167,8 @@ class login(Tk):
     def __init__(root):
         super().__init__()
         root.option = 0
-        root.title('Swimmer Login Page')
-        root.geometry('925x500+300+200')
+        root.title('Knockout Numbers Login Page')
+        root.geometry('625x475')
         root.configure(bg="white")
         root.resizable(False, False)
 
@@ -216,7 +224,7 @@ class login(Tk):
         #Background image, frame and heading for GUI
 
         frame= Frame(root, width=350, height=350, bg="white")
-        frame.place(x=480, y=70)
+        frame.place(x=150, y=70)
 
 
         heading = Label(frame, text = ACCOUNT_OPTIONS[root.option], fg = '#57a1f8', bg='white', font = ('Helvetica', 23, 'bold') )
@@ -272,7 +280,8 @@ class login(Tk):
         main_button.place(x=35, y=204)
         label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
         label.place(x=72.5, y=270)
-
+        instructions_label=tk.Label(root, justify="left", anchor="w", text="(1)Type in Username and Password\n(2)Click on sign in to play the game\n(3)If you don't have an account click sign up at the bottom and enter your preferred credentials to sign up", bg='white',)
+        instructions_label.place(relx=.5,rely=.85, anchor=CENTER)
 
         change_option = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8', command=accounts)
         change_option.place(x=215, y=270)
@@ -322,7 +331,7 @@ class intropage(tk.Tk):
         super().__init__()
         self.geometry("600x400")
         self.resizable(False, False)
-        self.title("Introduction")
+        self.title("Knockout Numbers Introduction")
         self.configure(bg='#0294ee')
         frame = tk.Frame(bg='#ffffff')
         easy= tk.Button(self, text="easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.1, rely=0.3)
