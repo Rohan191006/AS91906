@@ -1,0 +1,339 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import random
+import json
+
+ACCOUNT_OPTIONS = ["Login", "Signup"]
+
+#class for game page
+class gamepage(tk.Tk):
+    derived_question = None
+    answer = None
+    def __init__(app, difficulty):
+        super().__init__()
+        app.answered_already= False
+        score= IntVar()
+        app.time_left = 60
+        app.gif_index = 0
+    
+        def check(var1):
+            if var1.get().isalpha()==True:
+                error_label.config(text="Enter a number\nnot a letter")
+                app.after(2500, error_clear)
+            elif var1.get()=="":
+                error_label.config(text="Dont leave it blank\nAnswer the Question", font=13)
+                app.after(2500, error_clear)
+            elif var1.get().isdigit()==False and var1.get().find("-")>=1: #fix this
+                error_label.config(text="Enter a number\nnot a special character", font=13)
+                app.after(2500, error_clear)
+            else:
+                submit(solving)
+            solving.delete(0, 'end')
+
+
+        def submit(var1):
+            if app.answered_already== False:
+                if var1.get() == str(app.answer):
+                    result_label.config(text="Correct")
+                    app.gif_index=10
+                    player_gif()
+                    score.set(score.get()+1)
+                    app.after(1000, try_again)
+                    if score.get()==3:
+                        app.final_page(1)
+                else:
+                    result_label.config(text="Wrong")
+                    opponent_gif()
+                    app.time_left-=2
+                    time_deduc_label.config(text="-2")
+                    app.after(1000, try_again)
+                app.answered_already = True
+
+
+        def error_clear():
+            error_label.config(text="")
+
+        def player_gif():
+            if app.gif_index == 16: 
+                app.gif_index = 0
+                return
+            
+            app.gif_image = tk.PhotoImage(file="boxing.gif", format=f"gif -index {app.gif_index}")
+            gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
+            app.gif_index+=1
+            app.after(30, player_gif)
+
+        def opponent_gif():
+            if app.gif_index == 10: 
+                app.gif_index = 0
+                return
+            
+            app.gif_image = tk.PhotoImage(file="boxing.gif", format=f"gif -index {app.gif_index}")
+            gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
+            app.gif_index+=1
+            app.after(30, opponent_gif)
+
+        def update_timer():
+
+            if app.time_left > 0:
+                app.time_left -= 1
+                timer_label.config(text=f"Time left: {app.time_left}s")
+                app.after(1000, update_timer)
+            else:
+                app.final_page(2)
+
+
+        def try_again():
+            result_label.config(text="")
+            time_deduc_label.config(text="")
+            try_again.num1update = random.randint(0, max_var)
+            try_again.num2update = random.randint(0, max_var)
+            if difficulty==1:
+                operation = random.choice(["+"])
+            elif difficulty==2:
+                operation = random.choice(["+", "-"])
+            else:
+                operation = random.choice(["+", "-", "*"])
+
+            app.derived_question= f"{try_again.num1update} {operation} {try_again.num2update}"
+            app.answer= eval(app.derived_question)
+            app.derived_question = f"{try_again.num1update} {operation} {try_again.num2update}"
+            app.answer = eval(app.derived_question)
+            score_label= tk.Label(app,text=f"Score: {score.get()}",bg='#0294ee', font= 16)
+            score_label.place(relx=0.63, rely=0.71)
+            newQ = tk.Label(app, text=app.derived_question, font=("Courier", 16),bg='#0294ee')
+            newQ.place(relx=0.4, rely=0.7, relwidth=.2)
+            app.answered_already= False
+            solving.delete(0, tk.END)
+            if app.time_left==60:
+                update_timer()
+
+        app.title("Math For Kids")
+        app.geometry("600x400")
+        app.configure(bg='#0294ee')
+        app.resizable(False, False)
+        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')
+        start.place(relx=0.463, rely=0.7)
+
+        if difficulty == 1: 
+            max_var = 10
+        elif difficulty == 2:
+            max_var = 25
+        else:
+            max_var = 50
+
+
+        solving = tk.Entry(app)
+        app.gif_image = tk.PhotoImage(file="boxing.gif", format="gif -index 1")
+        gif_canvas = tk.Canvas(width=480, height=250, background="white")
+        gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
+        gif_canvas.place(x=0,y=10, anchor="n", relx=0.5)
+        solving.place(relx=0.4, rely=0.8, relwidth=0.2, relheight=0.05)
+        submit_button = tk.Button(app, text="Submit", command=lambda: check(solving),bg='#ffffff')
+        submit_button.place(relx=0.458, rely=0.9)
+        back_button = tk.Button(app, text="GO Back", bg="#ffffff", command=lambda: app.change_page())
+        back_button.place(relx=0.01, rely=0.8)
+        exit_button= tk.Button(app, text='Exit' , bg="#ffffff", command=lambda: app.destroy())
+        exit_button.place(relx=0.01, rely=0.9)
+        result_label = tk.Label(app, text="", fg="yellow", font=("Courier", 16), bg='#0294ee')
+        result_label.place(relx=0.2, rely=0.685, relwidth=0.2, relheight=0.1)
+        error_label= tk.Label(app, text="", fg="red", font=("Courier", 14), bg='#0294ee')
+        error_label.place(relx=0.65, rely=0.765)
+        timer_label = tk.Label(app, text=f"Time left: {app.time_left}s", font=("Courier", 16), bg='#0294ee')
+        timer_label.place(relx=0.55, rely=0.9)
+        time_deduc_label=tk.Label(app, text="", fg='red', font=16, bg='#0294ee')
+        time_deduc_label.place(relx=0.86, rely=0.905)        
+        app.mainloop()
+
+    def change_page(self):
+        self.destroy()
+        intropage()     
+
+    def final_page(app, resul):
+        app.destroy()
+        results_page(resul)
+
+#class for login screen with error proofing
+class login(Tk):
+    def __init__(root):
+        super().__init__()
+        root.option = 0
+        root.title('Swimmer Login Page')
+        root.geometry('925x500+300+200')
+        root.configure(bg="white")
+        root.resizable(False, False)
+
+        def accounts():
+            old_option = ACCOUNT_OPTIONS[root.option]
+            if root.option == 1:
+                root.option = 0
+                label.config(text="Don't have an account?")
+            else:
+                root.option = 1
+                label.config(text="Already have an account?")
+            heading.config(text=ACCOUNT_OPTIONS[root.option])
+            main_button.config(text=ACCOUNT_OPTIONS[root.option])
+            change_option.config(text=old_option)
+
+        def submit():
+            username=user.get()
+            password=code.get()
+
+            if len(username) > 4 and username.find(" ") == -1:
+                if len(password) > 5 and password.find(" ") == -1:
+                    if root.option == 0:
+                        #Sign In
+                        open_logins = open("logins.json", "r")
+                        accounts = json.load(open_logins)
+                        open_logins.close()
+                        for account in accounts:
+                            if account["username"] == username and account["password"] == password:
+                                root.destroy()
+                                intropage()
+                                return
+                            
+                        messagebox.showerror(message="Invalid login")
+                    else:
+                        #Sign Up
+                        open_logins = open("logins.json", "r")
+                        accounts = json.load(open_logins)
+                        open_logins.close()
+                        
+                        accounts.append({"username": username, "password": password})
+                        write_file = open("logins.json", "w")
+                        json.dump(accounts, write_file)
+                        write_file.close()
+                        root.destroy()
+                        intropage()
+                        return
+                else:
+                    messagebox.showerror(message="pass too short and/or has space")
+            else:
+                messagebox.showerror(message="user too short and/or has space")
+
+
+        #Background image, frame and heading for GUI
+
+        frame= Frame(root, width=350, height=350, bg="white")
+        frame.place(x=480, y=70)
+
+
+        heading = Label(frame, text = ACCOUNT_OPTIONS[root.option], fg = '#57a1f8', bg='white', font = ('Helvetica', 23, 'bold') )
+        heading.place(x=100, y=5)
+
+
+        #Placement for the Username textbox
+
+        def on_enter(e):
+            user.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=user.get()
+            if name == '':
+                user.insert(0, 'Username')
+
+
+        user = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        user.place(x=30, y=80)
+        user.insert(0, 'Username')
+        user.bind('<FocusIn>', on_enter)
+        user.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=107)
+
+
+        #Placement for the Password textbox
+
+        def on_enter(e):
+            code.delete(0, 'end')
+
+
+        def on_leave(e):
+            name=code.get()
+            if name== '':
+                code.insert(0, 'Password')
+
+
+        code = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        code.place(x=30, y=150)
+        code.insert(0, 'Password')
+        code.bind('<FocusIn>', on_enter)
+        code.bind('<FocusOut>', on_leave)
+
+
+        Frame(frame, width = 295, height=2, bg='black').place(x=25,y=177)
+
+        #Buttons
+
+        main_button = Button(frame, width=39, pady=7, text='Sign In', bg='#57a1f8', fg='white', font=('Helvetica', 9), border=0, command=submit)
+        main_button.place(x=35, y=204)
+        label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
+        label.place(x=72.5, y=270)
+
+
+        change_option = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8', command=accounts)
+        change_option.place(x=215, y=270)
+
+        root.mainloop()
+
+
+class instructions(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry('500x350')
+        self.resizable(False,False)
+        self.title("Game Instructions")
+        self.configure(bg='#0294ee')
+
+
+class results_page(tk.Tk):
+    def __init__(self, result):
+        super().__init__()
+        self.geometry('500x350')
+        self.resizable(False,False)
+        win_or_lose_label=tk.Label(self, text="",font=14, bg='#0294ee')
+        win_or_lose_label.place(relx=0.4, rely=0.2)
+        play_again=tk.Button(self, text="Play Again", command=lambda: self.change_page(1))
+        play_again.place(relx=.2, rely=.2)
+        sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(2))
+        sign_out.place(relx=.2, rely=.3)
+        exit_button= tk.Button(self, text='Exit' , bg="#ffffff", command=lambda: self.destroy())
+        exit_button.place(relx=0.01, rely=0.9)
+        self.title("Game Instructions")
+        self.configure(bg='#0294ee')
+        if result==1:
+            win_or_lose_label.config(text="You Win")
+        if result==2:
+            win_or_lose_label.config(text="You lose")
+        
+    def change_page(self, page):
+        self.destroy()
+        if page==1:
+            intropage()
+        else:
+            login()  
+
+#class for intro page to select game difficulty
+class intropage(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("600x400")
+        self.resizable(False, False)
+        self.title("Introduction")
+        self.configure(bg='#0294ee')
+        frame = tk.Frame(bg='#ffffff')
+        easy= tk.Button(self, text="easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.1, rely=0.3)
+        medium= tk.Button(self, text="medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.4, rely=0.3)
+        hard= tk.Button(self, text="hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)
+        frame.pack()
+        self.mainloop()
+
+    def change_page(self, diff):
+        self.destroy()
+        gamepage(diff)  
+
+if __name__ == "__main__":
+    login()
