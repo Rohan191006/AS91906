@@ -24,7 +24,7 @@ class gamepage(tk.Tk):
             elif var1.get()=="":
                 error_label.config(text="Dont leave it blank\nAnswer the Question", font=13)
                 app.after(2500, error_clear)
-            elif var1.get().isdigit()==False and var1.get().find("-")>=1: #fix this
+            elif var1.get().isdigit()==False and var1.get().find("-")>=1:
                 error_label.config(text="Enter a number\nnot a special character", font=13)
                 app.after(2500, error_clear)
             else:
