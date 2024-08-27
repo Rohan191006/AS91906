@@ -28,7 +28,7 @@ class gamepage(tk.Tk):
             elif var1.get()=="":
                 error_label.config(text="Dont leave it blank\nAnswer the Question", font=13)
                 app.after(2500, error_clear)
-            elif var1.get().isdigit()==False and var1.get().find("-")>=1: #fix this
+            elif var1.get().isdigit()==False and var1.get().find("-")>=1:
                 error_label.config(text="Enter a number\nnot a special character", font=13)
                 app.after(2500, error_clear)
             else:
@@ -46,9 +46,6 @@ class gamepage(tk.Tk):
                     app.after(1000, try_again)
                     if score.get()==3:
                         app.final_page(1)
-                        #messagebox.showinfo(message="You win.")
-                        #app.destroy()
-                        #intropage()
                 else:
                     result_label.config(text="Wrong")
                     opponent_gif()
@@ -89,10 +86,6 @@ class gamepage(tk.Tk):
                 app.after(1000, update_timer)
             else:
                 app.final_page(2)
-                #messagebox.showinfo(message="You lose.")
-                #app.destroy()
-                #intropage()
-
 
 
         def try_again():
