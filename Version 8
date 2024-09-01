@@ -52,7 +52,7 @@ class Gamepage(tk.Tk):
                     player_gif()
                     score.set(score.get()+1)
                     app.try_again_after=app.after(1000, try_again)
-                    if score.get()==10:
+                    if score.get()==1:
                         app.final_page(1)
 
                 else:
@@ -309,7 +309,7 @@ class Login(Tk):
         main_button.place(x=35, y=204)
         label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
         label.place(x=72.5, y=270)
-        instructions_label=tk.Label(root, justify="left", anchor="w", text="(1)Type in Username and Password\n(2)Click on sign in to play the game\n(3)If you don't have an account click sign up at the bottom and enter your preferred credentials to sign up",font=("Helvetica"), bg='white')
+        instructions_label=tk.Label(root, justify="left", anchor="w", text="(1)Type in Username and Password\n(2)Click on sign in to play the game\n(3)If you don't have an account click sign up at the bottom and enter your preferred credentials to sign up",font=("Helvetica", 10), bg='white')
         instructions_label.place(relx=.5,rely=.85, anchor=CENTER)
         # Button that switches between login and signup page
         change_option = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8', command=accounts)
@@ -326,7 +326,7 @@ class Instructions(tk.Tk):
         self.configure(bg='#0294ee')
         Label= tk.Label(self, text="Instructions", font=("Helvetica bold", 26), fg="white", bg='#0294ee')
         Label.place(relx=0.5, rely=0.1, anchor=CENTER)
-        instructions_label= tk.Label(self, justify="left", anchor="w", text="(1)Select the the difficulty\n(2)Answer 10 math questions correctly within 60 seconds to win. There\n     is no limit to the number of questions the player can attempt.\n(3) Press the start button to play\n(4) New Questions will keep appearing as you answer\n(5)If you get an answer wrong you will lose 2 seconds from the time left\n(6)There will be error messages to guide you if you enter an\n     invalid value\n(7)That's it from me, enjoy the game", font=("Helvetica", 14), bg='#0294ee', fg='white')
+        instructions_label= tk.Label(self, justify="left", anchor="w", text="(1) Select the the difficulty\n(2) Answer 10 math questions correctly within 60 seconds to win. There\n      is no limit to the number of questions the player can attempt.\n(3) Press the start button to play\n(4) New Questions will keep appearing as you answer\n(5) If you get an answer wrong you will lose 2 seconds from the time left\n(6) There will be error messages to guide you if you enter an\n      invalid value\n(7) That's it from me, enjoy the game", font=("Helvetica", 14), bg='#0294ee', fg='white')
         instructions_label.place(relx=0, rely=0.2)
         button= tk.Button(self, text="Go Back", command=lambda: self.change_page())
         button.place(relx=0.5, rely=0.85, anchor=CENTER)
@@ -348,7 +348,7 @@ class Results_page(tk.Tk):
         sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(2))
         sign_out.place(relx=.75, rely=.7, anchor=CENTER)
         exit_button= tk.Button(self, text='Exit' , bg="#ffffff", command=lambda: self.destroy())
-        exit_button.place(relx=0.29, rely=0.7, anchor=CENTER)
+        exit_button.place(relx=0.19, rely=0.7, anchor=CENTER)
         self.title("Game Instructions")
         self.configure(bg='#0294ee')
         if result==1:
@@ -374,15 +374,15 @@ class Intropage(tk.Tk):
         self.configure(bg='#0294ee')
         heading_label=tk.Label(self, text="Welcome to Knockout Numbers", font=("Helvetica bold", 26), fg="white", bg='#0294ee')
         heading_label.place(relx=.5,rely=.1, anchor=CENTER)
-        easy= tk.Button(self, text="easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.1, rely=0.3)
-        medium= tk.Button(self, text="medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.4, rely=0.3)
-        hard= tk.Button(self, text="hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)
+        easy= tk.Button(self, text="Easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.05, rely=0.3)
+        medium= tk.Button(self, text="Medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.375, rely=0.3)
+        hard= tk.Button(self, text="Hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)
         exit_button=tk.Button(self, text="exit", command=lambda: self.destroy())
-        exit_button.place(relx=0.5, rely=0.8)
+        exit_button.place(relx=0.495, rely=0.85,anchor=CENTER)
         instructions_button=tk.Button(self, text="Instructions", command=lambda: self.change_page(4))
-        instructions_button.place(relx=0.75, rely=0.8)
+        instructions_button.place(relx=0.825, rely=0.85,anchor=CENTER)
         sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(5))
-        sign_out.place(relx=.25, rely=.8)
+        sign_out.place(relx=.185, rely=.85, anchor=CENTER)
         self.mainloop()
 
     # Function to switch page based on difficulty from introduction page
