@@ -1,3 +1,12 @@
+#Rohan Sharma
+#Huimai: 13DYE
+#Purpose:The purpose of my program is to develop such a program that would help in improving the literacy of mathematics among students.
+#This program will make use of interactive and interesting learning resources that will aid students in the improvement of their mathematical abilities. 
+#This program, to be designed for the small business "Flow Computing," is intended to instruct students in several areas of mathematics, including addition, subtraction and multiplication. 
+#It also tends to enhance effectiveness and reach the learning of mathematics for pupils by means of a free resource.
+#Due Date: 2/09/2024
+
+#Importing all necessary modules
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
@@ -9,69 +18,69 @@ ACCOUNT_OPTIONS = ["Login", "Signup"]
 
 # class for game page
 class Gamepage(tk.Tk):
-    derived_question = None
-    answer = None
-    def __init__(app, difficulty):
-        super().__init__()
-        app.title("Knockout Numbers")
-        app.geometry("600x400")
-        app.configure(bg='#0294ee')
-        app.resizable(False, False)
-        app.answered_already= False
+    derived_question = None# Variable for questions
+    answer = None# Variable for user entered answer
+    def __init__(app, difficulty):# 
+        super().__init__()# Initialising attributes of parent class
+        app.title("Knockout Numbers")# Restricts user from resizing window
+        app.geometry("600x400")# Window Size
+        app.configure(bg='#0294ee')# Window Background Color
+        app.resizable(False, False)# Restricts user from resizing window
+        app.answered_already= False# Checks if question is answered or not
         score= IntVar()
-        app.time_left = 60
+        app.time_left = 60# Sets timer limit
         app.gif_index = 0
 
-        # Function to error prrof math game entry box
+        # Function to error proof math game entry box
         def check(var1):
-            try:
+            try:# Checks if answer is an integer
                 int(var1.get())
             except ValueError:
                 if var1.get().isalpha()==True:
                     error_label.config(text="Enter a number\nnot a letter", font=("Helvetica", 13))
-                    app.error_clear_after=app.after(2500, error_clear)
+                    app.error_clear_after=app.after(2500, error_clear)# Clear error label 2.5 seconds
                 elif var1.get()=="":
                     error_label.config(text="Dont leave it blank\nAnswer the Question", font=("Helvetica", 13))
-                    app.error_clear_after=app.after(2500, error_clear)
+                    app.error_clear_after=app.after(2500, error_clear)# Clear error label 2.5 seconds
                 else:
                     error_label.config(text="Enter a number\nnot a special character", font=("Helvetica", 13))
-                    app.error_clear_after=app.after(2500, error_clear)
+                    app.error_clear_after=app.after(2500, error_clear)# Clear error label 2.5 seconds
             else:
-                submit(solving)
+                submit(solving)# Send answer to be evaluated if it is a valid entry
             try:
-                solving.delete(0, tk.END)
+                solving.delete(0, tk.END)# Clear entry box after submit button is pressed
             except Exception:
                 pass
 
         # Function to evaluate answer entered by user
         def submit(var1):
-            if app.answered_already== False:
+            if app.answered_already== False:# Checks if question is answered or not
                 if var1.get() == str(app.answer):
-                    result_label.config(text="Correct", fg="yellow")
+                    result_label.config(text="Correct", fg="yellow")# Label Attributes
                     app.gif_index=10
-                    player_gif()
-                    score.set(score.get()+1)
-                    app.try_again_after=app.after(1000, try_again)
-                    if score.get()==1:
+                    player_gif()# Calls function to play gif
+                    score.set(score.get()+1)# Increases score by 1 
+                    app.try_again_after=app.after(1000, try_again)# Displays new question after 1 sec
+                    if score.get()==10:# The game will end when user answers 10 questions correctly
                         app.final_page(1)
 
                 else:
                     result_label.config(text="Wrong", fg="red")
-                    opponent_gif()
-                    app.time_left-=2
+                    opponent_gif()# Calls function to play gif
+                    app.time_left-=2# Deducts total time by 2 seconds
                     time_deduc_label.config(text="-2")
                     app.try_again_after=app.after(1000, try_again)
-                app.answered_already = True
+                app.answered_already = True# Checks if question is answered or not
 
         # Function to clear error label
         def error_clear():
-            error_label.config(text="")
+            error_label.config(text="")# Clears error label
 
         # Function used to play gif if user gets the answer right
         def player_gif():
             if app.gif_index == 16: 
                 app.gif_index = 0
-                return
+                return# Passes back values from function
                 
             app.gif_image = tk.PhotoImage(file="boxing.gif", format=f"gif -index {app.gif_index}")
             gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
@@ -83,7 +92,7 @@ class Gamepage(tk.Tk):
 
             if app.gif_index == 10: 
                 app.gif_index = 0
-                return
+                return# Passes back values from function
             
             app.gif_image = tk.PhotoImage(file="boxing.gif", format=f"gif -index {app.gif_index}")
             gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
@@ -96,7 +105,7 @@ class Gamepage(tk.Tk):
             # Disabling buttons after game has started
             back_button.config(state=tk.DISABLED)
             exit_button.config(state=tk.DISABLED)
-            if app.time_left > 0:
+            if app.time_left > 0:# Reduces timer only if timer has not reached 0
                 app.time_left -= 1
                 timer_label.config(text=f"Time left: {app.time_left}s")
                 app.update_timer_after=app.after(1000, update_timer)
@@ -108,9 +117,9 @@ class Gamepage(tk.Tk):
         def try_again():
             result_label.config(text="")
             time_deduc_label.config(text="")
-            submit_button.config(state=tk.NORMAL)
-            try_again.num1update = random.randint(min_var, max_var)
-            try_again.num2update = random.randint(min_var, max_var)
+            submit_button.config(state=tk.NORMAL)# Enables submit button
+            try_again.num1update = random.randint(min_var, max_var)# Boundary values for questions
+            try_again.num2update = random.randint(min_var, max_var)# Boundary values for questions
             #  Used to switch between difficulties
             if difficulty==1:
                 operation = random.choice(["+"])
@@ -119,17 +128,17 @@ class Gamepage(tk.Tk):
             else:
                 operation = random.choice(["+", "-", "*"])
             # Widgets that appear after start button is pressed
-            app.derived_question= f"{try_again.num1update} {operation} {try_again.num2update}"
-            app.answer= eval(app.derived_question)
+            app.derived_question= f"{try_again.num1update} {operation} {try_again.num2update}"# Question
+            app.answer= eval(app.derived_question)# Evaluates user answer
             app.derived_question = f"{try_again.num1update} {operation} {try_again.num2update}"
             app.answer = eval(app.derived_question)
-            score_label= tk.Label(app,text=f"Score: {score.get()}",bg='#0294ee', font= ("Helvetica bold", 16), fg='white')
+            score_label= tk.Label(app,text=f"Score: {score.get()}",bg='#0294ee', font= ("Helvetica bold", 16), fg='white')# Label for score
             score_label.place(relx=0.63, rely=0.7)
-            newQ = tk.Label(app, text=app.derived_question, font=("Helvetica bold", 16),bg='#0294ee', fg='white')
+            newQ = tk.Label(app, text=app.derived_question, font=("Helvetica bold", 16),bg='#0294ee', fg='white')# Label for question
             newQ.place(relx=0.4, rely=0.7, relwidth=.2)
-            app.answered_already= False
+            app.answered_already= False# Checks if question is answered or not
             solving.delete(0, tk.END)
-            if app.time_left==60:
+            if app.time_left==60:# Only starts timer if it is equal to 60
                 update_timer()
 
 
@@ -145,39 +154,39 @@ class Gamepage(tk.Tk):
             min_var = 20
 
         # Widgets for game page
-        solving = tk.Entry(app)
-        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')
+        solving = tk.Entry(app)#Entrybox for game page
+        start =tk.Button(app, text="Start", command=try_again,bg='#ffffff')# Button to start game
         start.place(relx=0.463, rely=0.7)
-        app.gif_image = tk.PhotoImage(file="boxing.gif", format="gif -index 1")
-        gif_canvas = tk.Canvas(width=480, height=250, background="white")
+        app.gif_image = tk.PhotoImage(file="boxing.gif", format="gif -index 1")# Gif for gamepage
+        gif_canvas = tk.Canvas(width=480, height=250, background="white")# Gif attributes
         gif_canvas.create_image(0,-30, anchor="nw", image=app.gif_image)
         gif_canvas.place(x=0,y=10, anchor="n", relx=0.5)
         solving.place(relx=0.4, rely=0.8, relwidth=0.2, relheight=0.05)
-        submit_button = tk.Button(app, text="Submit", command=lambda: check(solving),bg='#ffffff')
+        submit_button = tk.Button(app, text="Submit", command=lambda: check(solving),bg='#ffffff')# Button to submit answer
         submit_button.place(relx=0.458, rely=0.9)
-        submit_button.config(state=tk.DISABLED)
-        back_button = tk.Button(app, text="GO Back", bg="#ffffff", command=lambda: app.change_page())
+        submit_button.config(state=tk.DISABLED)# Disables submit button 
+        back_button = tk.Button(app, text="GO Back", bg="#ffffff", command=lambda: app.change_page())# Button to go back
         back_button.place(relx=0.01, rely=0.8)
-        exit_button= tk.Button(app, text='Exit' , bg="#ffffff", command=lambda: app.destroy())
+        exit_button= tk.Button(app, text='Exit' , bg="#ffffff", command=lambda: app.destroy())# Button to exit program
         exit_button.place(relx=0.01, rely=0.9)
-        result_label = tk.Label(app, text="", font=("Helvetica bold", 16), bg='#0294ee')
+        result_label = tk.Label(app, text="", font=("Helvetica bold", 16), bg='#0294ee')# Label for right or wrong
         result_label.place(relx=0.25, rely=0.7)
-        error_label= tk.Label(app, text="", fg="red", font=("Helvetica bold", 14), bg='#0294ee')
+        error_label= tk.Label(app, text="", fg="red", font=("Helvetica bold", 14), bg='#0294ee')# Label for error
         error_label.place(relx=0.65, rely=0.765)
-        timer_label = tk.Label(app, text=f"Time left: {app.time_left}s", font=("Helvetica bold", 16), bg='#0294ee', fg='white')
+        timer_label = tk.Label(app, text=f"Time left: {app.time_left}s", font=("Helvetica bold", 16), bg='#0294ee', fg='white')# Label for timer
         timer_label.place(relx=0.55, rely=0.9)
-        time_deduc_label=tk.Label(app, text="", fg='red', font=("Helvetica bold",16), bg='#0294ee')
+        time_deduc_label=tk.Label(app, text="", fg='red', font=("Helvetica bold",16), bg='#0294ee')# Label for time deduction
         time_deduc_label.place(relx=0.77, rely=0.9)        
         app.mainloop()
     
-    # Function to go back to Introductioon Page when game is not running
+    # Function to go back to Introduction Page when game is not running
     def change_page(self):
-        self.destroy()
-        Intropage()
+        self.destroy()# Destroys windows
+        Intropage()# Calls Intropage Class
 
     # Function to switch to final page after game completion
     def final_page(app, resul):
-        if hasattr(app, "error_clear_after"):
+        if hasattr(app, "error_clear_after"):# Used to cancel all after functions
             app.after_cancel(app.error_clear_after)
         if hasattr(app, "try_again_after"):
             app.after_cancel(app.try_again_after)
@@ -187,18 +196,18 @@ class Gamepage(tk.Tk):
             app.after_cancel(app.opponent_gif_after)
         if hasattr(app, "update_timer_after"):
             app.after_cancel(app.update_timer_after)
-        app.destroy()
-        Results_page(resul)
+        app.destroy()# Destroys windows
+        Results_page(resul)# Calls result page class with variable resul that decides if the user won or lost
 
 # class for Login screen with error proofing
 class Login(Tk):
     def __init__(root):
-        super().__init__()
+        super().__init__()# Initialising attributes of parent class
         root.option = 0
-        root.title('Knockout Numbers Login Page')
-        root.geometry('625x475')
-        root.configure(bg="white")
-        root.resizable(False, False)
+        root.title('Knockout Numbers Login Page')# Restricts user from resizing window
+        root.geometry('625x475')# Window Size
+        root.configure(bg="white")# Window Background Color
+        root.resizable(False, False)# Restricts user from resizing window
 
         # Function to switch between Login and sign up page
         def accounts():
@@ -227,34 +236,34 @@ class Login(Tk):
                         # Reading login info from json file
                         for account in accounts:
                             if account["username"] == username and account["password"] == password:
-                                root.destroy()
-                                Intropage()
-                                return
+                                root.destroy()# Destroys windows
+                                Intropage()# Calls Intropage class
+                                return# Passes back values from function
                             
                         messagebox.showerror(message="Invalid login")
                     else:
                         # Sign Up
-                        open_logins = open("logins.json", "r")
-                        accounts = json.load(open_logins)
+                        open_logins = open("logins.json", "r")# Variable for opening json file with login info
+                        accounts = json.load(open_logins)# Opens json file
                         open_logins.close()
                         # writing login info to json file
-                        accounts.append({"username": username, "password": password})
+                        accounts.append({"username": username, "password": password})# Format of login info in json file
                         write_file = open("logins.json", "w")
-                        json.dump(accounts, write_file)
+                        json.dump(accounts, write_file)# Wraps text to json file
                         write_file.close()
                         root.destroy()
                         Intropage()
                         return
                 else:
-                    messagebox.showerror(message="password too short and/or has space")
+                    messagebox.showerror(message="password too short and/or has space")# Messagebox for error if password is invalid 
             else:
-                messagebox.showerror(message="username too short and/or has space")
+                messagebox.showerror(message="username too short and/or has space")# Messagebox for error if username is invalid 
 
 
         
         # Widgets for login page
         frame= Frame(root, width=350, height=350, bg="white")
-        frame.place(x=150, y=70)
+        frame.place(x=150, y=70)# Placemnt of widget on window
 
 
         heading = Label(frame, text = ACCOUNT_OPTIONS[root.option], fg = '#57a1f8', bg='white', font = ('Helvetica', 23, 'bold') )
@@ -264,16 +273,16 @@ class Login(Tk):
         # Placement for the Username entrybox
 
         def on_enter(e):
-            user.delete(0, 'end')
+            user.delete(0, 'end')# Delete entrybox text
 
 
         def on_leave(e):
             name=user.get()
             if name == '':
-                user.insert(0, 'Username')
+                user.insert(0, 'Username')# Delete entrybox text
 
 
-        user = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )
+        user = Entry(frame, width=25, fg= 'black', border = 0, bg= "white", font = ('Helvetica', 11) )# Entrybox for username
         user.place(x=30, y=80)
         user.insert(0, 'Username')
         user.bind('<FocusIn>', on_enter)
@@ -286,7 +295,7 @@ class Login(Tk):
         # Placement for the Password entrybox
 
         def on_enter(e):
-            code.delete(0, 'end')
+            code.delete(0, 'end') # Delete entrybox text
 
 
         def on_leave(e):
@@ -305,52 +314,52 @@ class Login(Tk):
         Frame(frame, width = 295, height=2, bg='black').place(x=25,y=177)
 
         # Buttons
-        main_button = Button(frame, width=39, pady=7, text='Sign In', bg='#57a1f8', fg='white', font=('Helvetica', 9), border=0, command=submit)
+        main_button = Button(frame, width=39, pady=7, text='Sign In', bg='#57a1f8', fg='white', font=('Helvetica', 9), border=0, command=submit)# Button to sign in
         main_button.place(x=35, y=204)
-        label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))
+        label = Label(frame, text="Don't have an account?", fg='black', bg='white', font=('Helvetica', 9))# Label
         label.place(x=72.5, y=270)
-        instructions_label=tk.Label(root, justify="left", anchor="w", text="(1)Type in Username and Password\n(2)Click on sign in to play the game\n(3)If you don't have an account click sign up at the bottom and enter your preferred credentials to sign up",font=("Helvetica", 10), bg='white')
+        instructions_label=tk.Label(root, justify="left", anchor="w", text="(1)Type in Username and Password\n(2)Click on sign in to play the game\n(3)If you don't have an account click sign up at the bottom and enter your preferred credentials to sign up",font=("Helvetica", 10), bg='white')# Label for instructions
         instructions_label.place(relx=.5,rely=.85, anchor=CENTER)
         # Button that switches between login and signup page
-        change_option = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8', command=accounts)
+        change_option = Button(frame, width=6, text='Sign Up', border=0, bg='white', cursor='hand2', fg='#57a1f8', command=accounts)# Button to switch layout
         change_option.place(x=215, y=270)
         root.mainloop()
 
 # Class for intructions page
 class Instructions(tk.Tk):
     def __init__(self):
-        super().__init__()
-        self.geometry('600x350')
-        self.resizable(False,False)
-        self.title("Game Instructions")
-        self.configure(bg='#0294ee')
-        Label= tk.Label(self, text="Instructions", font=("Helvetica bold", 26), fg="white", bg='#0294ee')
+        super().__init__()# Initialising attributes of parent class
+        self.geometry('600x350')# Window Size
+        self.resizable(False,False)# Restricts user from resizing window
+        self.title("Game Instructions")# Restricts user from resizing window
+        self.configure(bg='#0294ee')# Window Background Color
+        Label= tk.Label(self, text="Instructions", font=("Helvetica bold", 26), fg="white", bg='#0294ee')# Label for instructions
         Label.place(relx=0.5, rely=0.1, anchor=CENTER)
-        instructions_label= tk.Label(self, justify="left", anchor="w", text="(1) Select the the difficulty\n(2) Answer 10 math questions correctly within 60 seconds to win. There\n      is no limit to the number of questions the player can attempt.\n(3) Press the start button to play\n(4) New Questions will keep appearing as you answer\n(5) If you get an answer wrong you will lose 2 seconds from the time left\n(6) There will be error messages to guide you if you enter an\n      invalid value\n(7) That's it from me, enjoy the game", font=("Helvetica", 14), bg='#0294ee', fg='white')
+        instructions_label= tk.Label(self, justify="left", anchor="w", text="(1) Select the the difficulty\n(2) Answer 10 math questions correctly within 60 seconds to win. There\n      is no limit to the number of questions the player can attempt.\n(3) Press the start button to play\n(4) New Questions will keep appearing as you answer\n(5) If you get an answer wrong you will lose 2 seconds from the time left\n(6) There will be error messages to guide you if you enter an\n      invalid value\n(7) That's it from me, enjoy the game", font=("Helvetica", 13), bg='#0294ee', fg='white')
         instructions_label.place(relx=0, rely=0.2)
-        button= tk.Button(self, text="Go Back", command=lambda: self.change_page())
+        button= tk.Button(self, text="Go Back", command=lambda: self.change_page())# Button to go back
         button.place(relx=0.5, rely=0.85, anchor=CENTER)
 
     # Function to switch back to Introduction Page
     def change_page(self):
-        self.destroy()
-        Intropage()
+        self.destroy()# Destroys windows
+        Intropage()# Calls Intropage class
 # Class for final page after game completion
 class Results_page(tk.Tk):
     def __init__(self, result):
-        super().__init__()
-        self.geometry('300x150')
-        self.resizable(False,False)
-        win_or_lose_label=tk.Label(self, text="",font=("Helvetica bold", 26),fg='white', bg='#0294ee')
+        super().__init__()# Initialising attributes of parent class
+        self.geometry('300x150')# Window Size
+        self.resizable(False,False)# Restricts user from resizing window
+        win_or_lose_label=tk.Label(self, text="",font=("Helvetica bold", 26),fg='white', bg='#0294ee')# Label for result
         win_or_lose_label.place(relx=0.5, rely=0.2, anchor=CENTER)
-        play_again=tk.Button(self, text="Play Again", command=lambda: self.change_page(1))
-        play_again.place(relx=.50, rely=.7, anchor=CENTER)
-        sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(2))
+        play_again=tk.Button(self, text="Play Again", command=lambda: self.change_page(1))# Button to play gain
+        play_again.place(relx=.45, rely=.7, anchor=CENTER)
+        sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(2))# Button to sign out
         sign_out.place(relx=.75, rely=.7, anchor=CENTER)
-        exit_button= tk.Button(self, text='Exit' , bg="#ffffff", command=lambda: self.destroy())
+        exit_button= tk.Button(self, text='Exit' , bg="#ffffff", command=lambda: self.destroy())# button to exit program
         exit_button.place(relx=0.19, rely=0.7, anchor=CENTER)
-        self.title("Game Instructions")
-        self.configure(bg='#0294ee')
+        self.title("Results")# Title for Window
+        self.configure(bg='#0294ee')# Window Background Color
         if result==1:
             win_or_lose_label.config(text="You Win")
         if result==2:
@@ -358,28 +367,28 @@ class Results_page(tk.Tk):
 
     # Function to switch pages from final page    
     def change_page(self, page):
-        self.destroy()
+        self.destroy()# Destroys windows
         if page==1:
-            Intropage()
+            Intropage()# Calls Intropage class
         else:
-            Login()  
+            Login()# Calls Login class
 
 # Class for introduction page to select game difficulty
 class Intropage(tk.Tk):
     def __init__(self):
-        super().__init__()
-        self.geometry("600x400")
-        self.resizable(False, False)
+        super().__init__()# Initialising attributes of parent class
+        self.geometry("600x400")# Window Size
+        self.resizable(False, False)# Restricts user from resizing window
         self.title("Knockout Numbers Introduction")
-        self.configure(bg='#0294ee')
-        heading_label=tk.Label(self, text="Welcome to Knockout Numbers", font=("Helvetica bold", 26), fg="white", bg='#0294ee')
+        self.configure(bg='#0294ee')# Window Background Color
+        heading_label=tk.Label(self, text="Welcome to Knockout Numbers", font=("Helvetica bold", 26), fg="white", bg='#0294ee')# Label for heading
         heading_label.place(relx=.5,rely=.1, anchor=CENTER)
-        easy= tk.Button(self, text="Easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.05, rely=0.3)
-        medium= tk.Button(self, text="Medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.375, rely=0.3)
-        hard= tk.Button(self, text="Hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)
-        exit_button=tk.Button(self, text="exit", command=lambda: self.destroy())
+        easy= tk.Button(self, text="Easy", bg='#ffffff',command=lambda: self.change_page(1), height=10, width=20).place(relx=0.05, rely=0.3)# Button for easy difficulty
+        medium= tk.Button(self, text="Medium", bg='#ffffff', command=lambda: self.change_page(2), height=10, width=20).place(relx=0.375, rely=0.3)# Button for medium difficulty
+        hard= tk.Button(self, text="Hard", bg='#ffffff',command=lambda: self.change_page(3), height=10, width=20).place(relx=0.7, rely=0.3)# Button for hard difficulty
+        exit_button=tk.Button(self, text="exit", command=lambda: self.destroy())#Button to exit program
         exit_button.place(relx=0.495, rely=0.85,anchor=CENTER)
-        instructions_button=tk.Button(self, text="Instructions", command=lambda: self.change_page(4))
+        instructions_button=tk.Button(self, text="Instructions", command=lambda: self.change_page(4))# Button for instructions page
         instructions_button.place(relx=0.825, rely=0.85,anchor=CENTER)
         sign_out=tk.Button(self, text="Sign Out", command=lambda: self.change_page(5))
         sign_out.place(relx=.185, rely=.85, anchor=CENTER)
@@ -387,13 +396,13 @@ class Intropage(tk.Tk):
 
     # Function to switch page based on difficulty from introduction page
     def change_page(self, page):
-        self.destroy()
+        self.destroy()# Destroys windows
         if page==1 or page==2 or page ==3:
-            Gamepage(page)
+            Gamepage(page)# Calls Gamepage class based on difficulty
         elif page==4:
-            Instructions()
+            Instructions()# Calls Introduction class
         else:
-            Login()
+            Login()# Calls Login class
   
 # Used to start program
 if __name__ == "__main__":
